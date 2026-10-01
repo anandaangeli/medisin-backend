@@ -26,7 +26,7 @@ class AuthController extends Controller
 
     public function refresh(): JsonResponse
     {
-        return $this->tokenResponse(auth('api')->refresh());
+        return $this->tokenResponse(auth('api')->refresh(), 'Token diperbarui.');
     }
 
     public function logout(): JsonResponse
@@ -36,10 +36,10 @@ class AuthController extends Controller
         return response()->json(['message' => 'Berhasil logout.']);
     }
 
-    private function tokenResponse(string $token): JsonResponse
+    private function tokenResponse(string $token, string $message = 'Login berhasil.'): JsonResponse
     {
         return response()->json([
-            'message' => 'Login berhasil.',
+            'message' => $message,
             'data' => [
                 'access_token' => $token,
                 'token_type' => 'bearer',

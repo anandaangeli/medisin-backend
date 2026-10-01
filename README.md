@@ -68,6 +68,9 @@ Backend men-decrypt di `App\Support\PayloadCrypto` sebelum validasi (`LoginReque
 - Kunjungan: `no_rm` wajib, format `RM` + angka, harus ada di tabel pasien.
 - Login: payload tidak terenkripsi / tidak valid → 422; kredensial salah → 401; tanpa token → 401.
 
+## Dokumentasi API
+Detail request/response tiap endpoint untuk integrasi frontend: [docs/API.md](docs/API.md).
+
 ## Postman
 File ada di folder [`postman/`](postman/):
 - `Medisin.postman_collection.json` — collection (Auth, Pasien, Kunjungan, Negative Test). Login punya Pre-request Script yang mengenkripsi username/password dan Test script yang menyimpan token otomatis.
