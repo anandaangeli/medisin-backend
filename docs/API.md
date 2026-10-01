@@ -17,11 +17,11 @@ Akun seeder: username `admin`, password `password`.
 ---
 
 ## POST /login
-`username` dan `password` dikirim terenkripsi AES-256-CBC dengan key `PAYLOAD_KEY`, format tiap field `base64(iv16 + ciphertext)`.
+`user_name` dan `password` dikirim terenkripsi AES-256-CBC dengan key `PAYLOAD_KEY`, format tiap field `base64(iv16 + ciphertext)`.
 
 Request:
 ```json
-{ "username": "<encrypted>", "password": "<encrypted>" }
+{ "user_name": "<encrypted>", "password": "<encrypted>" }
 ```
 Response 200:
 ```json

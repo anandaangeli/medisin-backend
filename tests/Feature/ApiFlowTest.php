@@ -17,10 +17,10 @@ class ApiFlowTest extends TestCase
 
         $this->getJson('/api/patients')->assertStatus(401);
 
-        $this->postJson('/api/login', ['username' => 'admin', 'password' => 'password'])->assertStatus(422);
+        $this->postJson('/api/login', ['user_name' => 'admin', 'password' => 'password'])->assertStatus(422);
 
         $token = $this->postJson('/api/login', [
-            'username' => PayloadCrypto::encrypt('admin'),
+            'user_name' => PayloadCrypto::encrypt('admin'),
             'password' => PayloadCrypto::encrypt('password'),
         ])->assertOk()->json('data.access_token');
 

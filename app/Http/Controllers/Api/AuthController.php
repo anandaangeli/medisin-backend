@@ -10,7 +10,10 @@ class AuthController extends Controller
 {
     public function login(LoginRequest $request): JsonResponse
     {
-        $token = auth('api')->attempt($request->validated());
+        $token = auth('api')->attempt([
+            'username' => $request->validated('user_name'),
+            'password' => $request->validated('password'),
+        ]);
 
         if (! $token) {
             return response()->json(['message' => 'Username atau password salah.'], 401);

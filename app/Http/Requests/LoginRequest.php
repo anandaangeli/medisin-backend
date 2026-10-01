@@ -12,11 +12,11 @@ class LoginRequest extends FormRequest
         return true;
     }
 
-    /** username & password arrive AES-encrypted; decrypt before validating. */
+    /** user_name & password arrive AES-encrypted; decrypt before validating. */
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'username' => is_string($this->username) ? PayloadCrypto::decrypt($this->username) : null,
+            'user_name' => is_string($this->user_name) ? PayloadCrypto::decrypt($this->user_name) : null,
             'password' => is_string($this->password) ? PayloadCrypto::decrypt($this->password) : null,
         ]);
     }
@@ -24,7 +24,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required', 'string'],
+            'user_name' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -32,7 +32,7 @@ class LoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'username.required' => 'Username wajib diisi atau payload tidak terenkripsi dengan benar.',
+            'user_name.required' => 'Username wajib diisi atau payload tidak terenkripsi dengan benar.',
             'password.required' => 'Password wajib diisi atau payload tidak terenkripsi dengan benar.',
         ];
     }

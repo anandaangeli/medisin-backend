@@ -32,7 +32,7 @@ Base URL: `http://localhost:8080/api`. Semua request pakai header `Accept: appli
 
 | Method | Endpoint | Auth | Keterangan |
 |---|---|---|---|
-| POST | `/login` | - | Body `{ "username": "<enc>", "password": "<enc>" }` → JWT |
+| POST | `/login` | - | Body `{ "user_name": "<enc>", "password": "<enc>" }` → JWT |
 | GET | `/me` | Bearer | User yang login |
 | POST | `/refresh` | Bearer | Refresh token |
 | POST | `/logout` | Bearer | Invalidate token |
@@ -45,7 +45,7 @@ Base URL: `http://localhost:8080/api`. Semua request pakai header `Accept: appli
 Response sukses: `{ "message": "...", "data": ... }`. Validasi gagal: HTTP 422 `{ "message", "errors": { field: [...] } }`.
 
 ## Enkripsi payload login
-`username` dan `password` dikirim terenkripsi, bukan plaintext.
+`user_name` dan `password` dikirim terenkripsi, bukan plaintext (mengikuti contoh payload di soal).
 
 - Algoritma: AES-256-CBC, PKCS7, key = `PAYLOAD_KEY` (32 byte, UTF-8)
 - IV: 16 byte random per field
@@ -59,7 +59,7 @@ function enc(plain) {
   const c = CryptoJS.AES.encrypt(plain, key, { iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
   return CryptoJS.enc.Base64.stringify(iv.concat(c.ciphertext));
 }
-// body: { username: enc('admin'), password: enc('password') }
+// body: { user_name: enc('admin'), password: enc('password') }
 ```
 Backend men-decrypt di `App\Support\PayloadCrypto` sebelum validasi (`LoginRequest`). Payload plaintext ditolak dengan 422.
 
@@ -73,8 +73,8 @@ Detail request/response tiap endpoint untuk integrasi frontend: [docs/API.md](do
 
 ## Postman
 File ada di folder [`postman/`](postman/):
-- `Medisin.postman_collection.json` — collection (Auth, Pasien, Kunjungan, Negative Test). Login punya Pre-request Script yang mengenkripsi username/password dan Test script yang menyimpan token otomatis.
-- `Medisin.postman_environment.json` — environment (`base_url`, `payload_key`, `username`, `password`, `token`, `no_rm`).
+- `Medisin API (SINTASI Backend Test).postman_collection.json` — collection (Auth, Pasien, Kunjungan, Negative Test). Login punya Pre-request Script yang mengenkripsi username/password dan Test script yang menyimpan token otomatis.
+- `Medisin Local.postman_environment.json` — environment (`base_url`, `payload_key`, `username`, `password`, `token`, `no_rm`).
 
 Cara pakai: Import keduanya → pilih environment "Medisin Local" → isi `payload_key` dengan nilai `PAYLOAD_KEY` dari `.env` backend → jalankan **Auth > Login** → request lain otomatis memakai Bearer token.
 
