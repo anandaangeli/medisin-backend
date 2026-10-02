@@ -19,7 +19,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "// AES-256-CBC, format: base64(iv[16] + ciphertext). Key = PAYLOAD_KEY backend (32 chars).",
-                  "const CryptoJS = require('crypto-js');",
+                  "// CryptoJS sudah tersedia global di sandbox Postman, tidak perlu require",
                   "const key = CryptoJS.enc.Utf8.parse(pm.environment.get('payload_key'));",
                   "function enc(plain) {",
                   "  const iv = CryptoJS.lib.WordArray.random(16);",
@@ -37,9 +37,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('status 200', () => pm.response.to.have.status(200));",
-                  "const d = pm.response.json().data;",
-                  "pm.environment.set('token', d.access_token);",
-                  "pm.test('token diterima', () => pm.expect(d.access_token).to.be.a('string'));"
+                  "const body = pm.response.json();",
+                  "// kalau gagal, tampilkan pesan backend di Test Results supaya jelas penyebabnya",
+                  "pm.test('token diterima: ' + (body.message || ''), () => pm.expect(body.data && body.data.access_token).to.be.a('string'));",
+                  "if (body.data) pm.environment.set('token', body.data.access_token);"
                 ]
               }
             }
@@ -258,9 +259,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('status 200', () => pm.response.to.have.status(200));",
-                  "const d = pm.response.json().data;",
-                  "pm.environment.set('token', d.access_token);",
-                  "pm.test('token diterima', () => pm.expect(d.access_token).to.be.a('string'));"
+                  "const body = pm.response.json();",
+                  "// kalau gagal, tampilkan pesan backend di Test Results supaya jelas penyebabnya",
+                  "pm.test('token diterima: ' + (body.message || ''), () => pm.expect(body.data && body.data.access_token).to.be.a('string'));",
+                  "if (body.data) pm.environment.set('token', body.data.access_token);"
                 ]
               }
             }
@@ -883,7 +885,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "// AES-256-CBC, format: base64(iv[16] + ciphertext). Key = PAYLOAD_KEY backend (32 chars).",
-                  "const CryptoJS = require('crypto-js');",
+                  "// CryptoJS sudah tersedia global di sandbox Postman, tidak perlu require",
                   "const key = CryptoJS.enc.Utf8.parse(pm.environment.get('payload_key'));",
                   "function enc(plain) {",
                   "  const iv = CryptoJS.lib.WordArray.random(16);",
